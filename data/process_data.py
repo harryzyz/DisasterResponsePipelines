@@ -5,13 +5,13 @@ from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     '''
-        This function reads messages.csv from messages_filepath and 
-        categories.csv from categories_filepath. Then merge them in to a datafrom df
+        This function reads messages_filepath and categories_filepath. 
+        Then merge them in to a datafrom df
 
         Input:  messages_filepath - message.csv filepath
                 categories_filepath - categories.csv filepath
         
-        Output: df
+        Output: df - dataframe containing uncleaned dataset
     '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -24,8 +24,8 @@ def clean_data(df):
     This function corrects the names of category columns 
     and assign integer values accordingly.
 
-    Input:  df
-    Output: df
+    Input:  df - dataframe containing uncleaned dataset
+    Output: df - dataframe containing cleaned dataset
     '''
     categories = df['categories'].str.split(';',expand=True)
     categories.columns = categories.iloc[0].apply(lambda x: x.split('-')[0])
@@ -50,7 +50,7 @@ def save_data(df, database_filename):
 
     Output: None
     '''
-    engine = create_engine('sqlite:///DisasterResponse.db')
+    engine = create_engine('sqlite:///'+database_filename)
     df.to_sql('df', engine, index=False)
 
 
